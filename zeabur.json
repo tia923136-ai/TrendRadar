@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "services": [
+    {
+      "name": "trendradar",
+      "type": "docker",
+      "image": "wantcat/trendradar:latest",
+      "port": 8080,
+      "healthCheck": {
+        "type": "http",
+        "path": "/",
+        "initialDelaySeconds": 30,
+        "periodSeconds": 10
+      },
+      "env": {
+        "RUN_MODE": "cron",
+        "CRON_SCHEDULE": "0 */6 * * *",
+        "IMMEDIATE_RUN": "true",
+        "ENABLE_WEBSERVER": "true",
+        "WEBSERVER_PORT": "8080",
+        "TZ": "Asia/Shanghai"
+      },
+      "volumes": [
+        {
+          "source": "config",
+          "target": "/app/config",
+          "type": "persistent"
+        },
+        {
+          "source": "output",
+          "target": "/app/output",
+          "type": "persistent"
+        }
+      ],
+      "resources": {
+        "cpu": "0.5",
+        "memory": "512Mi"
+      },
+      "restartPolicy": "always"
+    }
+  ]
+}
